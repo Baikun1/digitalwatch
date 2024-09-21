@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .completed-task .task-text {
+            text-decoration: line-through;
+        }
+
+        .completed-task {
+            background-color: #d3d3d3 !important;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto">
+            <a href="#" class="text-2xl font-bold">Digital Watch</a>
+        </div>
+    </nav>
+
+    <!-- Digital Watch Section -->
+    <section class="container mx-auto mt-8">
+        <div class="grid grid-cols-1">
+            <div class="col-md-6 m-auto">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+                    <div class="card-header text-white mb-4">
+                        <h2 class="text-2xl font-semibold"><i class="bi bi-clock-history"></i> Indian Digital Watch</h2>
+                    </div>
+                    <div class="bg-gray-700 p-2 rounded-lg text-white mb-4">
+                        <h4>Asia/Kolkata</h4>
+                    </div>
+                    <div class="time">
+                        <h1 id="time" class="text-4xl font-bold mb-4"></h1>
+                    </div>
+                    <div class="date">
+                        <h2 id="date" class="text-2xl"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timer Section -->
+    <section class="container mx-auto mt-8">
+        <div class="grid grid-cols-1">
+            <div class="col-md-6 m-auto">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+                    <div class="card-header text-white mb-4">
+                        <h2 class="text-2xl font-semibold">Timer</h2>
+                    </div>
+                    <h1 class="text-4xl font-bold">
+                        <span id="min">00</span> :
+                        <span id="sec">00</span> :
+                        <span id="m-sec">00</span>
+                    </h1>
+                    <div class="mt-6">
+                        <button class="btn btn-light bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg mr-2" id="start">Start</button>
+                        <button class="btn btn-light bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-lg mr-2" id="stop">Stop</button>
+                        <button class="btn btn-light bg-yellow-500 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg" id="restart">Restart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // DOM Elements
+const dateTag = document.getElementById('date');
+const timeTag = document.getElementById('time');
+const minTag = document.getElementById('min');
+const secTag = document.getElementById('sec');
+const mSecTag = document.getElementById('m-sec');
+const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
+const restartButton = document.getElementById('restart');
+
+// Time variables
+let interval = null;
+let min = 0, sec = 0, mSec = 0;
+
+// Update date and time every second
+setInterval(() => {
+    const now = new Date();
+    timeTag.textContent = now.toLocaleTimeString();
+    dateTag.textContent = now.toLocaleDateString();
+}, 1000);
+
+// Timer functions
+function displayTime() {
+    minTag.textContent = String(min).padStart(2, '0');
+    secTag.textContent = String(sec).padStart(2, '0');
+    mSecTag.textContent = String(mSec).padStart(3, '0');
+}
+
+function startTimer() {
+    if (interval) return; // Prevent multiple intervals
+    interval = setInterval(() => {
+        mSec += 10;
+        if (mSec >= 1000) {
+            mSec = 0;
+            sec++;
+            if (sec >= 60) {
+                sec = 0;
+                min++;
+            }
+        }
+        displayTime();
+    }, 10);
+}
+
+// Event listeners
+startButton.addEventListener('click', startTimer);
+stopButton.addEventListener('click', () => {
+    clearInterval(interval);
+    interval = null;
+});
+restartButton.addEventListener('click', () => {
+    clearInterval(interval);
+    interval = null;
+    min = sec = mSec = 0;
+    displayTime();
+});
+
+// Initial display
+displayTime();
+
+    </script>
+</body>
+
+</html>
